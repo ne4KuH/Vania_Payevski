@@ -1,0 +1,62 @@
+
+Scenario: Open the webpage
+	Given page "https://www.epam.com/careers/job-listings?recruitingUrl=%2Fcontent%2Fepam%2Fen%2Fcareers%2Fjob-listings%2Fjob&country=all&sort=relevance&searchType=placeOfWorkFilter" is open
+	When field "keyword" contains ""
+	And field "All Locations" contains "All Locations"
+	And field "All Scills" contains "All Skills"
+	And click on the button "submit"
+	Then site address is "https://www.epam.com/careers/job-listings?recruitingUrl=%2Fcontent%2Fepam%2Fen%2Fcareers%2Fjob-listings%2Fjob&country=all&sort=relevance&searchType=placeOfWorkFilter"
+
+Scenario: changing language
+	Given the page "https://www.epam.com/" is opened
+	When choose "Select language"
+	And choose "Україна UA"
+	Then the page equals "https://careers.epam.ua/"
+
+Scenario: testing the searchstring
+	Given the page "https://careers.epam.ua/search?q=" is opened
+	When field "id-d06f21d8-c289-3e0f-8440-95c6af9ff4ba" is empty
+	And click on the button "search-results__submit"
+	Then the page equals "https://careers.epam.ua/search?q="
+
+Scenario: check box on news subscription page 
+	Given page "https://careers.epam.ua/company/contact/news-subscription" is opened
+	When field "_content_epam_en_ua_request-information_jcr_content_content-container_section_748974942_section-par_form_constructor_userEmail" contains ""
+	And list "_content_epam_en_ua_request-information_jcr_content_content-container_section_748974942_section-par_form_constructor_skills" contains ""
+	And checkbox "new_form_gdprConsent" is empty
+	Then write text "Обов'язкове поле" near checkbox
+
+Scenario: menu buttons
+	Given any page
+	When language is Eng
+	And tap on the "button"
+	Then go to "url"
+
+	Examples: 
+	| button   | url                           |
+	| About    | https://www.epam.com/about    |
+	| Careers  | https://www.epam.com/careers  |
+	| Insights | https://www.epam.com/insights |
+	
+
+
+Scenario: contacting the company
+	Given page "https://www.epam.com/about/who-we-are/contact" is opened
+	When all fields aren`t empty
+	And all fields are correctly fielded
+	Then email are in epam`s mail
+
+
+Scenario: Search empty equals search
+	Given page "https://www.epam.com/search?q=" is opened
+	When field "id-2feda5a9-ecf9-3bfc-ac3f-665e0bb78df4" is empty
+	And button "find" is "cklicked"
+	Then go to page "https://www.epam.com/search?q="
+
+Scenario: Search incorrect info
+	Given page "https://www.epam.com/search?q=" is opened
+	When field "id-2feda5a9-ecf9-3bfc-ac3f-665e0bb78df4" contains "incorrect info"
+	Then show the message "Sorry, but your search returned no results. Please try another query."
+	And go to page "https://www.epam.com/search?q=incorrectinfo"
+
+
